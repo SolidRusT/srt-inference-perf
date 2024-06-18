@@ -14,10 +14,11 @@ def main():
     config = load_config(args.config)
     questions = config['questions']
     endpoints = config['endpoints']
+    iterations = config.get('load_test', {}).get('iterations', 5)
 
     all_results = []
     for question in questions:
-        results = run_tests_in_parallel(endpoints, question)
+        results = run_tests_in_parallel(endpoints, question, iterations)
         performance = measure_performance(results)
         all_results.append({
             "question": question,

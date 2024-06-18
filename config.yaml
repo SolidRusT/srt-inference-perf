@@ -7,3 +7,6 @@ questions:
 endpoints:
   - http://thanatos:8081/v1/completions
   - http://orpheus:8081/v1/completions
+
+load_test:
+  iterations: 5
