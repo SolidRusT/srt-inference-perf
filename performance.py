@@ -1,13 +1,19 @@
 # performance.py
-def measure_performance(results):
-    total_time = sum(result['response_time'] for result in results)
-    success_count = sum(1 for result in results if result['status_code'] == 200)
-    error_count = len(results) - success_count
+from collections import defaultdict
 
-    return {
-        "total_requests": len(results),
-        "total_time": total_time,
-        "average_response_time": total_time / len(results),
-        "success_count": success_count,
-        "error_count": error_count
-    }
+def measure_performance(results):
+    endpoint_performance = defaultdict(lambda: {"total_time": 0, "total_requests": 0, "success_count": 0, "error_count": 0})
+
+    for result in results:
+        endpoint = result["endpoint"]
+        endpoint_performance[endpoint]["total_time"] += result["response_time"]
+        endpoint_performance[endpoint]["total_requests"] += 1
+        if result["status_code"] == 200:
+            endpoint_performance[endpoint]["success_count"] += 1
+        else:
+            endpoint_performance[endpoint]["error_count"] += 1
+
+    for endpoint, metrics in endpoint_performance.items():
+        metrics["average_response_time"] = metrics["total_time"] / metrics["total_requests"]
+
+    return endpoint_performance
