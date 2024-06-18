@@ -4,6 +4,7 @@ from config_loader import load_config
 from parallel_runner import run_tests_in_parallel
 from performance import measure_performance
 from output_formatter import format_human_readable
+from prometheus_exporter import start_prometheus_server
 
 def display_usage():
     return (
@@ -15,6 +16,7 @@ def display_usage():
     )
 
 def main():
+    start_prometheus_server()
     parser = argparse.ArgumentParser(description="srt-inference-perf", add_help=False)
     parser.add_argument("--config", required=False, help="Path to the configuration file")
     parser.add_argument("--json", action="store_true", help="Display results in JSON format")
@@ -29,7 +31,7 @@ def main():
     config = load_config(args.config)
     questions = config['questions']
     endpoints = config['endpoints']
-    iterations = config.get('load_test', {}).get('iterations', 5)
+    iterations = config.get('load_test', {}).get('iterations', 3)
     concurrency = config.get('load_test', {}).get('concurrency', 1)
 
     all_results = []
