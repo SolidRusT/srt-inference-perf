@@ -1,6 +1,7 @@
 # parallel_runner.py
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from api_client import query_vllm
+from tqdm import tqdm
 
 
 def run_tests_in_parallel(endpoints, payload, iterations, concurrency, num_threads=4):
@@ -12,7 +13,7 @@ def run_tests_in_parallel(endpoints, payload, iterations, concurrency, num_threa
                 for _ in range(concurrency):
                     futures.append((executor.submit(query_vllm, endpoint, payload), endpoint))
 
-        for future, endpoint in futures:
+        for future, endpoint in tqdm(futures, desc="Testing", unit="request"):
             result = future.result()
             result["endpoint"] = endpoint
             results.append(result)

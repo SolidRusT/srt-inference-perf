@@ -1,6 +1,5 @@
 # prometheus_exporter.py
 from prometheus_client import start_http_server, Summary, Counter, Gauge
-import time
 
 # Create Prometheus metrics to track
 REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')

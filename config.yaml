@@ -5,11 +5,14 @@ questions:
     temperature: 3
 
 endpoints:
-  - http://erebus:8081/v1/completions
-  - http://thanatos:8081/v1/completions
-  - http://zelus:8081/v1/completions
+  #- http://erebus:8081/v1/completions
+  #- http://thanatos:8081/v1/completions
+  #- http://zelus:8081/v1/completions
   - http://orpheus:8081/v1/completions
 
 load_test:
   iterations: 3
-  concurrency: 2
+  concurrency: 10
+
+prometheus:
+  port: 8000

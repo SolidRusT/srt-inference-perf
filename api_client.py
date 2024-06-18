@@ -2,6 +2,9 @@
 import requests
 import time
 from prometheus_exporter import REQUEST_TIME, REQUEST_COUNT, SUCCESS_COUNT, ERROR_COUNT, WORD_COUNT
+import logging
+
+logging.basicConfig(filename='error.log', level=logging.ERROR)
 
 def query_vllm(endpoint, payload):
     headers = {"Content-Type": "application/json"}
@@ -26,9 +29,10 @@ def query_vllm(endpoint, payload):
         end_time = time.time()
         REQUEST_TIME.observe(end_time - start_time)
         ERROR_COUNT.inc()
+        error_details = e.response.text if e.response else str(e)
         return {
             "response_time": end_time - start_time,
             "status_code": None,
             "error": str(e),
-            "error_details": e.response.text if e.response else str(e)
+            "error_details": error_details
         }

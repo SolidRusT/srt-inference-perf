@@ -16,11 +16,11 @@ def display_usage():
     )
 
 def main():
-    start_prometheus_server()
     parser = argparse.ArgumentParser(description="srt-inference-perf", add_help=False)
     parser.add_argument("--config", required=False, help="Path to the configuration file")
     parser.add_argument("--json", action="store_true", help="Display results in JSON format")
     parser.add_argument("--usage", action="store_true", help="Show usage message")
+    parser.add_argument("--prometheus-port", type=int, default=8000, help="Port for Prometheus server")
 
     args, unknown = parser.parse_known_args()
 
@@ -29,6 +29,10 @@ def main():
         return
 
     config = load_config(args.config)
+    prometheus_port = args.prometheus_port or config.get('prometheus', {}).get('port', 8000)
+    start_prometheus_server(prometheus_port)
+
+
     questions = config['questions']
     endpoints = config['endpoints']
     iterations = config.get('load_test', {}).get('iterations', 3)
