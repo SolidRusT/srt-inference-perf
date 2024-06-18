@@ -1,13 +1,13 @@
-# vLLM Performance Tester
+# srt-inference-perf
 
 ## Overview
 
-vLLM Performance Tester is a tool designed to measure the performance of vLLM API endpoints. This app reads user-defined questions from a JSON or YAML file, queries multiple vLLM API endpoints, and generates performance metrics for comparison. The primary objective is to help AI teams tune API configuration parameters for optimal performance.
+srt-inference-perf is a tool designed to measure the performance of any OpenAI-compatible completions endpoint, including vLLM, Hugging Face TGI, LLama.CPP Server, and more. This app reads user-defined questions from a JSON or YAML file, queries multiple endpoints, and generates performance metrics for comparison. The primary objective is to help AI teams tune API configuration parameters for optimal performance.
 
 ## Features
 
 - Reads questions from a JSON or YAML file
-- Queries multiple vLLM API endpoints
+- Queries multiple OpenAI-compatible completions endpoints
 - Measures response time, error rate, and other relevant metrics
 - Supports parallel testing across multiple endpoints
 - Generates a performance report
@@ -16,8 +16,8 @@ vLLM Performance Tester is a tool designed to measure the performance of vLLM AP
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/SolidRusT/vllm-performance-tester.git
-    cd vllm-performance-tester
+    git clone https://github.com/SolidRusT/srt-inference-perf.git
+    cd srt-inference-perf
     ```
 
 2. Create and activate a virtual environment (optional but recommended):
@@ -44,6 +44,9 @@ vLLM Performance Tester is a tool designed to measure the performance of vLLM AP
     endpoints:
       - http://thanatos:8081/v1/completions
       - http://erebus:8081/v1/completions
+
+    load_test:
+      iterations: 5
     ```
 
 ## Usage
@@ -51,6 +54,11 @@ vLLM Performance Tester is a tool designed to measure the performance of vLLM AP
 Run the performance tester with your configuration file:
 ```bash
 python main.py --config config.yaml
+```
+
+To display the results in a human-readable format:
+```bash
+python main.py --config config.yaml --human
 ```
 
 ## License

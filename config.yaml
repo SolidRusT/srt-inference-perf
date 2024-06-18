@@ -2,11 +2,14 @@ questions:
   - model: "solidrust/Mistral-7B-instruct-v0.3-AWQ"
     prompt: "Role: You are a creative and imaginative storywriter.\nInstruction: Write a simple and engaging poem about who kicked my dog.\nInput:"
     max_tokens: 512
-    temperature: 5
+    temperature: 3
 
 endpoints:
+  - http://erebus:8081/v1/completions
   - http://thanatos:8081/v1/completions
+  - http://zelus:8081/v1/completions
   - http://orpheus:8081/v1/completions
 
 load_test:
-  iterations: 5
+  iterations: 3
+  concurrency: 2

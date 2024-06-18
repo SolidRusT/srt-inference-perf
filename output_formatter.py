@@ -12,8 +12,10 @@ def format_human_readable(results):
             f"Total Requests: {metrics['total_requests']}\n"
             f"Total Time: {metrics['total_time']:.2f} seconds\n"
             f"Average Response Time: {metrics['average_response_time']:.2f} seconds\n"
+            f"Average Words: {metrics['average_words']:.2f}\n"
             f"Success Count: {metrics['success_count']}\n"
             f"Error Count: {metrics['error_count']}\n"
+            f"Errors: {metrics['errors']}\n"
         ) for endpoint, metrics in performance.items()])
 
         formatted_results.append(f"Question:\n{question_str}\nPerformance:\n{performance_str}\n")
