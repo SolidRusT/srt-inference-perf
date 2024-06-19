@@ -4,6 +4,7 @@ from api_client import query_vllm
 from tqdm import tqdm
 from collections import defaultdict
 import itertools
+import threading
 
 def run_tests_in_parallel(endpoints, payload, iterations, concurrency, thread_multiplier):
     results = []
@@ -15,6 +16,12 @@ def run_tests_in_parallel(endpoints, payload, iterations, concurrency, thread_mu
     num_threads = len(endpoints) * concurrency * thread_multiplier
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        # Track the number of active threads
+        active_threads = threading.active_count()
+
+        # Display the number of active threads vs. total available threads
+        print(f"Active threads: {active_threads} / Total available threads: {executor._max_workers}")
+
         # Create a combined iterable of all tasks for all endpoints
         tasks = list(itertools.chain.from_iterable(
             [(endpoint, query_vllm, payload) for _ in range(iterations) for _ in range(concurrency)]
