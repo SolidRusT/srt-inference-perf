@@ -36,11 +36,11 @@ def main():
     endpoints = config['endpoints']
     iterations = config.get('load_test', {}).get('iterations', 5)
     concurrency = config.get('load_test', {}).get('concurrency', 1)
-    max_parallel_hosts = config.get('load_test', {}).get('max_parallel_hosts', len(endpoints))
+    thread_multiplier = config.get('load_test', {}).get('thread_multiplier', len(endpoints) * concurrency)
 
     all_results = []
     for question in questions:
-        results = run_tests_in_parallel(endpoints, question, iterations, concurrency, max_parallel_hosts)
+        results = run_tests_in_parallel(endpoints, question, iterations, concurrency, thread_multiplier)
         performance = measure_performance(results)
         all_results.append({
             "question": question,
