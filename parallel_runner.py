@@ -12,7 +12,7 @@ def run_tests_in_parallel(endpoints, payload, iterations, concurrency, thread_mu
     futures_to_endpoint = {}
 
     # Calculate the required number of threads
-    num_threads = thread_multiplier
+    num_threads = len(endpoints) * concurrency * thread_multiplier
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
         # Create a combined iterable of all tasks for all endpoints

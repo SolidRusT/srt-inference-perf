@@ -36,7 +36,7 @@ def main():
     endpoints = config['endpoints']
     iterations = config.get('load_test', {}).get('iterations', 5)
     concurrency = config.get('load_test', {}).get('concurrency', 1)
-    thread_multiplier = config.get('load_test', {}).get('thread_multiplier', len(endpoints) * concurrency)
+    thread_multiplier = config.get('load_test', {}).get('thread_multiplier', 7)  # Default to 7 if not specified
 
     all_results = []
     for question in questions:
