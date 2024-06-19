@@ -5,6 +5,25 @@ from tqdm import tqdm
 from collections import defaultdict
 import itertools
 import threading
+import logging
+import psutil
+import time
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def log_system_resources():
+    cpu_usage = psutil.cpu_percent()
+    memory_info = psutil.virtual_memory()
+    active_threads = threading.active_count()
+    logging.debug(f"Active threads: {active_threads} / Total available threads: {threading.active_count()}")
+    logging.debug(f"CPU Usage: {cpu_usage}%")
+    logging.debug(f"Memory Usage: {memory_info.percent}%")
+
+def periodic_logging(interval):
+    while True:
+        log_system_resources()
+        time.sleep(interval)
 
 def run_tests_in_parallel(endpoints, payload, iterations, concurrency, thread_multiplier):
     results = []
@@ -16,11 +35,10 @@ def run_tests_in_parallel(endpoints, payload, iterations, concurrency, thread_mu
     num_threads = len(endpoints) * concurrency * thread_multiplier
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
-        # Track the number of active threads
-        active_threads = threading.active_count()
-
-        # Display the number of active threads vs. total available threads
-        print(f"Active threads: {active_threads} / Total available threads: {executor._max_workers}")
+        # Start the periodic logging thread
+        logging_thread = threading.Thread(target=periodic_logging, args=(5,))
+        logging_thread.daemon = True
+        logging_thread.start()
 
         # Create a combined iterable of all tasks for all endpoints
         tasks = list(itertools.chain.from_iterable(

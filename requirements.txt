@@ -2,3 +2,4 @@ requests
 PyYAML
 prometheus-client
 tqdm
+psutil
