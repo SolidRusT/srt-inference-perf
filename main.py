@@ -20,7 +20,7 @@ def main():
     parser.add_argument("--config", required=False, help="Path to the configuration file")
     parser.add_argument("--json", action="store_true", help="Display results in JSON format")
     parser.add_argument("--usage", action="store_true", help="Show usage message")
-    parser.add_argument("--prometheus-port", type=int, default=8000, help="Port for Prometheus server")
+    parser.add_argument("--prometheus-port", type=int, help="Port for Prometheus server")
 
     args, unknown = parser.parse_known_args()
 
@@ -32,15 +32,15 @@ def main():
     prometheus_port = args.prometheus_port or config.get('prometheus', {}).get('port', 8000)
     start_prometheus_server(prometheus_port)
 
-
     questions = config['questions']
     endpoints = config['endpoints']
-    iterations = config.get('load_test', {}).get('iterations', 3)
+    iterations = config.get('load_test', {}).get('iterations', 5)
     concurrency = config.get('load_test', {}).get('concurrency', 1)
+    max_parallel_hosts = config.get('load_test', {}).get('max_parallel_hosts', len(endpoints))
 
     all_results = []
     for question in questions:
-        results = run_tests_in_parallel(endpoints, question, iterations, concurrency)
+        results = run_tests_in_parallel(endpoints, question, iterations, concurrency, max_parallel_hosts)
         performance = measure_performance(results)
         all_results.append({
             "question": question,
